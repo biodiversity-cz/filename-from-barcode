@@ -15,7 +15,7 @@ docker run -v "$(pwd):/src/" cdrx/pyinstaller-windows:python3
 
 ## Linux 
 
-Download only the [script](barcode_rename.py) and run
+Download only the [script](barcode_rename.py) with [reuirements](requirements.txt) and run
 ```shell
 python3 -m venv myenv
 source myenv/bin/activate

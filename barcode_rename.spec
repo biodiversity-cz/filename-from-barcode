@@ -15,7 +15,7 @@ exe = EXE(
     a.scripts,
     [],
     exclude_binaries=True,
-    name='barcode_builder',
+    name='barcode_rename',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
@@ -30,5 +30,5 @@ coll = COLLECT(
     a.zipfiles,
     copy_dependents=True,
     upx=True,
-    name='barcode_builder',
+    name='barcode_rename',
 )

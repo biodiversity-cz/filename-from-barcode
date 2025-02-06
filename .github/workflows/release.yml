@@ -17,14 +17,13 @@ jobs:
 
       - name: Build EXE using Docker
         run: |
-          docker run --rm -v ${{ github.workspace }}:/src cdrx/pyinstaller-windows:python3@sha256:7d7bcb510a2e785f4936a2a61989fa93ff1eeba3b80571fbba919c23e52a0a63 \
-          "pyinstaller --onefile --noconsole /src/barcode_rename.py"
+          docker run --rm -v ${{ github.workspace }}:/src/ cdrx/pyinstaller-windows:python3@sha256:7d7bcb510a2e785f4936a2a61989fa93ff1eeba3b80571fbba919c23e52a0a63 
 
       - name: Upload EXE as artifact
         uses: actions/upload-artifact@v4
         with:
           name: barcode_rename
-          path: dist/barcode_rename.exe
+          path: dist/windows/barcode_rename/barcode_rename.exe
 
   release:
     needs: build
@@ -41,4 +40,4 @@ jobs:
       - name: Upload EXE to GitHub Releases
         uses: softprops/action-gh-release@v2
         with:
-          files: dist/barcode_rename.exe
+          files: dist/windows/barcode_rename/barcode_rename.exe
