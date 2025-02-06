@@ -40,7 +40,7 @@ jobs:
         with:
           files: dist/windows/barcode_rename/barcode_rename.exe
           tag_name: ${{ github.ref_name }}
-          release_name: Release ${{ github.ref_name }}
+          name: Release ${{ github.ref_name }}
           draft: false
           prerelease: false
         env:
