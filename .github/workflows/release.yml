@@ -35,13 +35,24 @@ jobs:
         with:
           name: barcode_rename
 
-      - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2
+      - name: release
+        uses: actions/create-release@v1
+        id: create_release
         with:
-          files: barcode_rename
-          tag_name: ${{ github.ref_name }}
-          name: Release ${{ github.ref_name }}
           draft: false
           prerelease: false
+          release_name: Release ${{ github.ref_name }}
+          tag_name: ${{ github.ref }}
+          body_path: README.md
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: upload windows artifact
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: .dist/windows/barcode_rename/barcode_rename.zip
+          asset_name: barcode_rename.zip
+          asset_content_type: application/zip
