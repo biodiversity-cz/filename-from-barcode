@@ -9,8 +9,8 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/mordfustang21/gozbar"
-
+	"github.com/makiuchi-d/gozxing"
+	"github.com/makiuchi-d/gozxing/qrcode"
 )
 
 func getBarcodeFromImage(imagePath string) (string, error) {
@@ -25,26 +25,18 @@ func getBarcodeFromImage(imagePath string) (string, error) {
 		return "", fmt.Errorf("error decoding image: %w", err)
 	}
 
-	img := gozbar.FromImage(i)
-	scanner := gozbar.NewScanner()
+	bitmap, err := gozxing.NewBinaryBitmapFromImage(i)
+    if err != nil {
+        return "", fmt.Errorf("error creating binary bitmap: %w", err)
+    }
 
-	err = scanner.Scan(img)
-	if err != nil {
-		return "", fmt.Errorf("error scanning image: %w", err)
-	}
+	reader := qrcode.NewQRCodeReader()
+    result, err := reader.Decode(bitmap, nil)
+    if err != nil {
+        return "", fmt.Errorf("error scanning image: %w", err)
+    }
 
-	defer scanner.Destroy()
-	barcode := ""
-
-	img.First().Each(func(str string) {
-		barcode = str
-	})
-
-	if barcode == "" {
-		return "", fmt.Errorf("barcode not found in %s", imagePath)
-	}
-
-	return barcode, nil
+    return result.GetText(), nil
 }
 
 func sanitizeFilename(filename string) string {
