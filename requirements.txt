@@ -1,3 +1,0 @@
-pyzbar
-Pillow
-pyinstaller

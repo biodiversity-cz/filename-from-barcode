@@ -1,27 +1,27 @@
 # filename-from-barcode
-Rename specimen scan images according to barcode detected inside
+Rename specimen Archive Master scans' (TIF images) according to barcode detected inside. 
+1) put the file into folder where tif files are present
+2) run it
+3) all .tif files in this folder will be renamed, info is in terminal. In case the name already exists (there is more than one scan of the same specimen ID). th enew name will include the original filename as a suffix.
 
-## Windows 
+## compilation (Ubuntu 24)
+Sadly, due the dependencies, it is not possible to build the script for different OS from scratch. Use GO on your platform and build it.. :/
 
-### var A
-Download the exe file from releases
-
-### var B
-build the file on Linux by yourself
+### run only for the first time
 ```shell
-docker run -v "$(pwd):/src/" cdrx/pyinstaller-windows:python3 "pyinstaller --onefile  --specpath /src --hidden-import=pyzbar.pyzbar barcode_rename.py"
+sudo apt update
+sudo apt install golang-go libzbar-dev
+
+go mod init barcode_rename  
+go mod tidy
+go get github.com/mordfustang21/gozbar
+go get golang.org/x/image/tiff
+
+ 
 ```
 
-
-## Linux 
-
-Download only the [script](barcode_rename.py) with [reuirements](requirements.txt) and run
 ```shell
-python3 -m venv myenv
-source myenv/bin/activate
-pip install -r requirements.txt
-
-python barcode_rename.py
-
-deactivate
+go build -o barcode_rename #build for actual OS
 ```
+
+ 
