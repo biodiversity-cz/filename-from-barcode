@@ -9,7 +9,8 @@ Download the exe file from releases
 ### var B
 build the file on Linux by yourself
 ```shell
-docker run -v "$(pwd):/src/" cdrx/pyinstaller-windows:python3 "pyinstaller --onefile  --specpath /src --hidden-import=pyzbar.pyzbar barcode_rename.py" ```
+docker run -v "$(pwd):/src/" cdrx/pyinstaller-windows:python3 "pyinstaller --onefile  --specpath /src --hidden-import=pyzbar.pyzbar barcode_rename.py"
+```
 
 
 ## Linux 
