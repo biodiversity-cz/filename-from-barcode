@@ -11,6 +11,8 @@ import (
 
 	"github.com/makiuchi-d/gozxing"
     "github.com/makiuchi-d/gozxing/oned"
+
+	"github.com/disintegration/imaging"
 )
 
 func getBarcodeFromImage(imagePath string) (string, error) {
@@ -25,11 +27,13 @@ func getBarcodeFromImage(imagePath string) (string, error) {
 		return "", fmt.Errorf("error decoding image: %w", err)
 	}
 
+	i = imaging.AdjustContrast(i, 50)
+	i = imaging.Resize(i, 0, 2000,imaging.Lanczos )
+
 	bitmap, err := gozxing.NewBinaryBitmapFromImage(i)
     if err != nil {
         return "", fmt.Errorf("error creating binary bitmap: %w", err)
     }
-
 
     hints := map[gozxing.DecodeHintType]interface{}{
             gozxing.DecodeHintType_POSSIBLE_FORMATS: []gozxing.BarcodeFormat{
@@ -45,11 +49,11 @@ func getBarcodeFromImage(imagePath string) (string, error) {
         }
 
     readers := []gozxing.Reader{
-//     		oned.NewCode128Reader(),
-//     		oned.NewCode93Reader(),
-//     		oned.NewCode39Reader(),
-//     		oned.NewCodaBarReader(),
-//     		oned.NewITFReader(),
+    		oned.NewCode128Reader(),
+    		oned.NewCode93Reader(),
+    		oned.NewCode39Reader(),
+    		oned.NewCodaBarReader(),
+    		oned.NewITFReader(),
     		oned.NewMultiFormatUPCEANReader(hints),
     	}
     for _, reader := range readers {
