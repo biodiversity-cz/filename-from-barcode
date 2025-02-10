@@ -10,7 +10,7 @@ import (
 	"strings"
 
 	"github.com/makiuchi-d/gozxing"
-	"github.com/makiuchi-d/gozxing/qrcode"
+    "github.com/makiuchi-d/gozxing/oned"
 )
 
 func getBarcodeFromImage(imagePath string) (string, error) {
@@ -30,13 +30,37 @@ func getBarcodeFromImage(imagePath string) (string, error) {
         return "", fmt.Errorf("error creating binary bitmap: %w", err)
     }
 
-	reader := qrcode.NewQRCodeReader()
-    result, err := reader.Decode(bitmap, nil)
-    if err != nil {
-        return "", fmt.Errorf("error scanning image: %w", err)
+
+    hints := map[gozxing.DecodeHintType]interface{}{
+            gozxing.DecodeHintType_POSSIBLE_FORMATS: []gozxing.BarcodeFormat{
+                gozxing.BarcodeFormat_EAN_13,
+                gozxing.BarcodeFormat_UPC_A,
+                gozxing.BarcodeFormat_EAN_8,
+                gozxing.BarcodeFormat_UPC_E,
+                gozxing.BarcodeFormat_CODE_128,
+                gozxing.BarcodeFormat_CODE_39,
+                gozxing.BarcodeFormat_ITF,
+                gozxing.BarcodeFormat_CODABAR,
+            },
+        }
+
+    readers := []gozxing.Reader{
+//     		oned.NewCode128Reader(),
+//     		oned.NewCode93Reader(),
+//     		oned.NewCode39Reader(),
+//     		oned.NewCodaBarReader(),
+//     		oned.NewITFReader(),
+    		oned.NewMultiFormatUPCEANReader(hints),
+    	}
+    for _, reader := range readers {
+        result, err := reader.Decode(bitmap, nil)
+        if err == nil {
+            return result.GetText(), nil
+        }
     }
 
-    return result.GetText(), nil
+    return "", fmt.Errorf("no barcode found")
+
 }
 
 func sanitizeFilename(filename string) string {

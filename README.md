@@ -15,8 +15,6 @@ sudo apt install golang-go libzbar-dev
 
 go mod init barcode_rename  
 go mod tidy
-go get github.com/mordfustang21/gozbar
-go get golang.org/x/image/tiff 
 ```
 
 ```shell
