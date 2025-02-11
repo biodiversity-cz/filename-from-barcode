@@ -1,6 +1,7 @@
-go.*
 barcode_rename
 barcode_rename.exe
+barcode_rename.spec
 dist
+build
 myenv
 test

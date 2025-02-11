@@ -5,28 +5,22 @@ Rename specimen Archive Master scans' (TIF images) according to the barcode dete
 2) run
 3) all .tif files in this folder will be renamed, info is in terminal. In case the name already exists (there is more than one scan of the same specimen ID), the new name will include the original filename as a suffix.
 
+## Run 
+Download from the [Releases](https://github.com/biodiversity-cz/filename-from-barcode/releases)
 
-## GO
-
-### Ubuntu 24
-
-```shell
-sudo apt update
-sudo apt install golang-go # libzbar-dev
-
-go mod init barcode_rename  
-go mod tidy
-```
-
-```shell
-go build -o barcode_rename 
-```
-
-## Python
-
+## Build
 ### Ubuntu
+```shell
+sudo apt-get install libzbar0
 
-Download only the [script](barcode_rename.py) with [reuirements](requirements.txt) and run
+python3 -m venv myenv
+source myenv/bin/activate
+
+pyinstaller --onefile --hidden-import=pyzbar.pyzbar --hidden-import=PIL --collect-binaries pyzbar barcode_rename.py
+
+deactivate
+```
+for debugging:
 ```shell
 python3 -m venv myenv
 source myenv/bin/activate
@@ -37,8 +31,12 @@ python barcode_rename.py
 deactivate
 ```
 
-### Windows 
-[solve dependencies](https://ruvi-d.medium.com/getting-zbarlight-to-work-on-windows-a3dc643dba18)
+### Windows
+Let's have a Windows with Python installed:
+1) ```pip install pyinstaller pyzbar Pillow```
+2) ```pyinstaller --onefile --hidden-import=pyzbar.pyzbar --hidden-import=PIL --collect-binaries pyzbar --add-binary "libiconv.dll;." barcode_rename.py```
+
+There should be possible to build it via Docker, but I did not found a working solution
 ```shell
-docker run -v "$(pwd):/src/" cdrx/pyinstaller-windows:python3 "pyinstaller --onefile  --specpath /src --hidden-import=pyzbar.pyzbar barcode_rename.py"
+docker run -v "$(pwd):/src/" cdrx/pyinstaller-windows:python3  bash -c "pyinstaller --onefile --specpath /src --hidden-import=pyzbar.pyzbar --add-binary \"/src/libiconv.dll;_MEIPASS\" --add-binary \"/src/libzbar64-0.dll;_MEIPASS\" barcode_rename.py"
 ```

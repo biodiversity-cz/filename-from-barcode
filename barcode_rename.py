@@ -1,5 +1,4 @@
-import os
-import re
+import os, re, sys
 from pyzbar.pyzbar import decode
 from PIL import Image
 
@@ -23,7 +22,10 @@ def sanitize_filename(filename):
     return re.sub(r'[^a-zA-Z0-9]', '-', filename.upper())
 
 def rename_files_in_directory(directory):
-    script_directory = os.path.dirname(os.path.realpath(__file__))
+    if getattr(sys, "frozen", False):
+        script_directory = os.path.dirname(sys.executable)
+    else:
+        script_directory = os.path.dirname(os.path.realpath(__file__))
 
     for filename in os.listdir(script_directory):
         if filename.lower().endswith('.tif'):
